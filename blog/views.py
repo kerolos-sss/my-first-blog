@@ -13,6 +13,10 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_new(request):
+    if not request.user.is_authenticated:
+        return redirect('post_list')
+        
+
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -26,6 +30,9 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 def post_edit(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('post_list')
+        
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
